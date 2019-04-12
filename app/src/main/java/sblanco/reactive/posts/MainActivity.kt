@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.message_list_item.view.*
 import sblanco.reactive.posts.common.toObservable
@@ -16,7 +17,9 @@ import sblanco.reactive.posts.entities.Message
 
 class MainActivity : AppCompatActivity() {
 
-    val model = MessagesModel()
+    private val model = MessagesModel()
+
+    private val bag = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +31,9 @@ class MainActivity : AppCompatActivity() {
         messages_list.adapter = MessageListItemAdapter{
 
         }
-
-        refresh_btn.toObservable()
+        
+        bag.add(
+            refresh_btn.toObservable()
             .flatMap {
                model.getMessages()
             }
@@ -38,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 messagesAdapter.notifyDataSetChanged()
                 Log.d("Click",it!!.size.toString())
             }
+        )
     }
 
 
@@ -72,4 +77,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        bag.clear()
+    }
 }
