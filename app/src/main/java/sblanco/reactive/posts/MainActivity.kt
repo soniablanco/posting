@@ -24,9 +24,6 @@ class MainActivity : AppCompatActivity() {
             .flatMap {
                model.getMessages()
             }
-            .map {
-                it.body()
-            }
             .subscribe{
                 Log.d("Click",it!!.size.toString())
             }

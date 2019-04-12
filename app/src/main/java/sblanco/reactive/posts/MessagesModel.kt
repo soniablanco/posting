@@ -15,13 +15,13 @@ class MessagesModel {
         placeHolderApi = ServiceGenerator.createService(JsonPlaceHolderService::class.java)
     }
 
-    fun getMessages(): Observable<Response<List<Message>>> {
-        return Observable.create<Response<List<Message>>> { emiter ->
-            val call = ServiceGenerator.createService(JsonPlaceHolderService::class.java).getMessages()
+    fun getMessages(): Observable<List<Message>> {
+        return Observable.create<List<Message>> { emiter ->
+            val call = placeHolderApi.getMessages()
             call.enqueue(object : Callback<List<Message>> {
                 override fun onResponse(call: Call<List<Message>>, response: Response<List<Message>>) {
                     if (response.isSuccessful) {
-                        emiter.onNext(response)
+                        emiter.onNext(response.body())
                         emiter.onComplete()
                     } else {
                         emiter.onError(Throwable(response.message()))
