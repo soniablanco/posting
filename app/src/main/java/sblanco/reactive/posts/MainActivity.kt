@@ -33,10 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         bag.add(
-            refresh_btn.toObservable().startWith(this)
-            .flatMap {
-               model.getMessages()
-            }
+            model.getMessages(refresh_btn.toObservable().startWith(this))
             .subscribe{
                 messagesAdapter.updateMessages(it)
                 messagesAdapter.notifyDataSetChanged()
