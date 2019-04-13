@@ -31,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         messages_list.adapter = MessageListItemAdapter{
 
         }
-        
+
         bag.add(
-            refresh_btn.toObservable()
+            refresh_btn.toObservable().startWith(this)
             .flatMap {
                model.getMessages()
             }
