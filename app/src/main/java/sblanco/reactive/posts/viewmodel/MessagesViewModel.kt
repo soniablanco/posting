@@ -1,29 +1,50 @@
-package sblanco.reactive.posts
+package sblanco.reactive.posts.viewmodel
 
 import android.util.Log
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import sblanco.reactive.posts.entities.Message
-import sblanco.reactive.posts.network.JsonPlaceHolderService
-import sblanco.reactive.posts.network.ServiceGenerator
+import sblanco.reactive.posts.model.network.JsonPlaceHolderService
+import sblanco.reactive.posts.model.network.ServiceGenerator
+import sblanco.reactive.posts.view.MessageListAdapter
 
 class MessagesModel {
     private val placeHolderApi: JsonPlaceHolderService
 
+    var messageListAdapter = MessageListAdapter{
+
+    }
+
+    private lateinit var disposables: CompositeDisposable
+
     init {
+        initRx()
         placeHolderApi = ServiceGenerator.createService(JsonPlaceHolderService::class.java)
     }
 
-    fun getMessages(initialEvents:Observable<Any>): Observable<List<Message>> {
-        return initialEvents.flatMap {
-            getMessagesFromService()
-        }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+    private fun initRx(){
+        disposables = CompositeDisposable()
+    }
+
+    fun getMessages(initialEvents:Observable<Any>) {
+
+         disposables.add(initialEvents
+             .flatMap {
+                getMessagesFromService()
+             }
+             .subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread())
+             .subscribe{
+                messageListAdapter.updateMessages(it)
+                messageListAdapter.notifyDataSetChanged()
+                Log.d("Click",it!!.size.toString())
+
+            })
     }
 
     private fun getMessagesFromService(): Observable<List<Message>> {
@@ -45,5 +66,9 @@ class MessagesModel {
 
             })
         }
+    }
+
+    fun clear(){
+        if (!disposables.isDisposed) disposables.dispose()
     }
 }
