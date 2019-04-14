@@ -5,13 +5,15 @@ import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-import sblanco.reactive.posts.viewmodel.MessagesModel
+
+import sblanco.reactive.posts.viewmodel.MessagesViewModel
 import sblanco.reactive.posts.R
 import sblanco.reactive.posts.common.toObservable
+import sblanco.reactive.posts.model.network.retrofit.RetrofitMessagesService
 
 class MainActivity : AppCompatActivity() {
 
-    private val model = MessagesModel()
+    private val model = MessagesViewModel(RetrofitMessagesService())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

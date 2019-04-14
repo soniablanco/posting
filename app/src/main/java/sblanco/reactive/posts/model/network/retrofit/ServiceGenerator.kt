@@ -1,4 +1,4 @@
-package sblanco.reactive.posts.model.network
+package sblanco.reactive.posts.model.network.retrofit
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

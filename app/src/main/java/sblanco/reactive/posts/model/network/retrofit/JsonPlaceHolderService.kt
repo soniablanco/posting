@@ -1,4 +1,4 @@
-package sblanco.reactive.posts.model.network
+package sblanco.reactive.posts.model.network.retrofit
 
 import retrofit2.Call
 import retrofit2.http.Body
