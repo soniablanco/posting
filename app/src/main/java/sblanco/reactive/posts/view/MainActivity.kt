@@ -9,11 +9,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import sblanco.reactive.posts.viewmodel.MessagesViewModel
 import sblanco.reactive.posts.R
 import sblanco.reactive.posts.common.toObservable
-import sblanco.reactive.posts.model.network.retrofit.RetrofitMessagesService
 
 class MainActivity : AppCompatActivity() {
 
-    private val model = MessagesViewModel(RetrofitMessagesService())
+    private val model = MessagesViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         messages_list.adapter = model.messageListAdapter
         model.getMessages(refresh_btn.toObservable().startWith(this))
+
+        model.getUsers(users_btn.toObservable())
     }
 
     override fun onDestroy() {

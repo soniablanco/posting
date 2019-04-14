@@ -6,3 +6,9 @@ data class Message(
     val title:String,
     val body:String
 )
+
+data class User(
+    val id:Int,
+    val name:String,
+    val userName:String
+)

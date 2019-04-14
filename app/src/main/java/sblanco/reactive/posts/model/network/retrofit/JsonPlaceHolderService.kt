@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import sblanco.reactive.posts.entities.Message
+import sblanco.reactive.posts.entities.User
 
 interface JsonPlaceHolderService {
     @GET("/posts")
@@ -16,4 +17,7 @@ interface JsonPlaceHolderService {
 
     @POST("/posts")
     fun postMessage(@Body message: Message): Call<Message>
+
+    @GET("/users")
+    fun getUsers():Call<List<User>>
 }
